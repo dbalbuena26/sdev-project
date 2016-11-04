@@ -31,7 +31,7 @@ int main() {
 			case 3: tm.salesReport();
 							break;
 			case 4: cout << "Goodbye!\n";
-							return 0;
+							break;
 		}
 	} while (choice != 4);
 
