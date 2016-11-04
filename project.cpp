@@ -19,7 +19,7 @@ int main() {
 			if (choice > 0 && choice < 5)
 				break;
 			else 
-				cout << "Invalid entry. Please try again.\n";
+				cout << "Invalid entry. Please try again.\n\n";
 		}
 
 	
