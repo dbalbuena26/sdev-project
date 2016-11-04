@@ -7,24 +7,20 @@ using namespace std;
 class TicketMaster {
 public:
 
-	int displaySeats() {
+	void displaySeats() {
 		cout << "displaySeats\n";
-		return 0;
 	}
 
-	int requestTicekts() {
+	void requestTicekts() {
 		cout << "requestTicekts\n";
-		return 0;
 	}
 		
-	int purchaseTickets() {
+	void purchaseTickets() {
 		cout << "purchaseTickets\n";
-		return 0;
 	}
 
-	int salesReport() {
+	void salesReport() {
 		cout << "salesReport\n";
-		return 0;
 	}
 
 };
