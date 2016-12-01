@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <string>
 using namespace std;
 
 const int Max_Rows = 15;
@@ -29,8 +30,8 @@ class TicketMaster {
   
   // a getter for seat availability 
   bool isSeatSold(int row, int col){
-    if (auditorium[row][col].seatstatus = SeatAvail){
-      cout << auditorium[row][col].seatstatus << endl;
+    if (auditorium[row][col].seatstatus == SeatAvail){
+      // cout << auditorium[row][col].seatstatus << endl;
       return true;
     }
     else
@@ -41,15 +42,15 @@ class TicketMaster {
   bool insideSS(int ,int ); //defined below
 
   // get the price of the seat
-  float getSeatPrice(int row, int col){
-    return auditorium[row][col].seatprice;
+  float getSeatPrice(int row){
+    return auditorium[row][0].seatprice;
   }
 
   void setSeatPrice(int row, int col,float price){
     auditorium[row][col].seatprice = price;
   }
 
-  void sellSeat(int row, int col){
+  void markSold(int row, int col){
     auditorium[row][col].seatstatus = SeatTaken;
   }
 
@@ -59,13 +60,9 @@ class TicketMaster {
   
   void displaySeats();
 
-  void requestTicekts() {
-    cout << "requestTicekts\n";
-  }
+  int requestTickets(int, int, int);
   
-  void purchaseTickets() {
-    cout << "purchaseTickets\n";
-  }
+  string purchaseTickets(int, int, int, float);
   
   void salesReport() {
     cout << "salesReport\n";
@@ -89,7 +86,7 @@ TicketMaster::TicketMaster() {
   else {
     while ((row < Max_Rows) && (PriceFile >> tempPrice)){
       for (col=0; col< Max_Cols; col++){
-	setSeatPrice(row,col,tempPrice);
+        setSeatPrice(row,col,tempPrice);
       }
       row++;
     }
@@ -105,22 +102,24 @@ TicketMaster::TicketMaster() {
     while ((row < Max_Rows) && (SeatsFile >> tempData)){
       col = 0;
       while (col < Max_Cols){
-	if (tempData[col] == SeatTaken) {
-	  sellSeat(row,col);
-	}
-	col++;
+      	if (char(tempData[col]) == SeatTaken) {
+      	  markSold(row,col);
+      	}
+      	col++;
       };
       row++;
     }
   }
 }
 
+// Bounds checking
 bool TicketMaster::insideSS(int row, int col) {
   if ((row < 0) || (row >= Max_Rows)) {return false;};
   if ((col < 0) || (row >= Max_Cols)) {return false;};
   return true;
 }
 
+// Display seating chart
 void TicketMaster::displaySeats() {
   cout << "     Seats" << endl;
   int numX = Max_Cols / 10; // work out the number of rows
@@ -144,8 +143,53 @@ void TicketMaster::displaySeats() {
     };
     cout << endl;
   };
+  cout << endl;
 }
 
+// Check if tickets are available
+int TicketMaster::requestTickets(int seats, int row, int start) {
+
+  for (int i = start; i < start + seats; i++) {
+    if (!isSeatSold(row, i)) {
+      return 1;
+    }
+  }
+return 0;
+}
+
+// purchase tickets
+string TicketMaster::purchaseTickets(int seats, int row, int start, float price) {
+  float payment = 0.0;
+  char retry = ' ';
+
+  // Validate and accept money input
+  while (true) {
+    cout << "How much will you be paying with? ";
+    cin >> payment;
+    if (payment < price) {
+      while (true) {
+        cout << "Not enough funds to continue the transaction. Would you like to try again? (Y or N) ";
+        cin >> retry;
+        if (retry != 'y' && retry != 'Y' && retry != 'n' && retry != 'N') {
+          cout << "Invalid entry, please choose Y or N.\n";
+        } else if (retry == 'N' || retry == 'n')
+            return "Transaction Canceled.\n\n";
+          else 
+            break;
+      }
+    } else {
+        cout << "You will get $" << fixed << setprecision(2) << payment - price << " in change.\n";
+        break;
+      }
+  }
+
+  // Mark seats as sold
+  
+
+
+
+  return " purchasing\n";
+}
 
 
 #endif
