@@ -73,21 +73,31 @@ class TicketMaster {
   
   void salesReport() {
     cout << "salesReport\n";
+    cout << "Seats sold: " << getSeatsSold() << " Total Money: " << getTotalMoney() << endl;
   }
 
   int getSeatsSold() {
     return seatsSold;
   }
 
-  int setSeatsSold(int sold) {
+  void setSeatsSold(int sold) {
     seatsSold += sold;
+  }
+
+  void clearSeatsSold(){
+    seatsSold = 0;
   }
 
   float getTotalMoney() {
     return totalMoney;
   }
-  float setTotalMoney(float sold) {
+
+  void setTotalMoney(float sold) {
     totalMoney += sold;
+  }
+
+  void clearTotalMoney() {
+    totalMoney = 0.0;
   }
 	
 };
@@ -276,8 +286,8 @@ void TicketMaster::clearSeats() {
       auditorium[row][col].seatstatus = SeatAvail;
     }
   }
-  setSeatsSold(0);
-  setTotalMoney(0.0);
+  clearSeatsSold();
+  clearTotalMoney();
 }
 
 #endif
