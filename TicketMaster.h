@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 const int Max_Rows = 15;
@@ -32,7 +33,6 @@ class TicketMaster {
   // a getter for seat availability 
   bool isSeatSold(int row, int col){
     if (auditorium[row][col].seatstatus == SeatAvail){
-      // cout << auditorium[row][col].seatstatus << endl;
       return true;
     }
     else
@@ -61,6 +61,8 @@ class TicketMaster {
   
   void displaySeats();
 
+  void clearSeats();
+
   int requestTickets(int, int, int);
   
   string purchaseTickets(int, int, int, float);
@@ -73,7 +75,6 @@ class TicketMaster {
 
 TicketMaster::TicketMaster() {
 
-  cout << "in Constructor.\n";
   // Read the price file and fill in data.
   ifstream PriceFile;
   ifstream SeatsFile;
@@ -114,8 +115,6 @@ TicketMaster::TicketMaster() {
     }
   }
   SeatsFile.close();
-
-  cout << "leaving constructor\n";
 }
 
 // Bounds checking
@@ -155,16 +154,11 @@ void TicketMaster::displaySeats() {
 // Check if tickets are available
 int TicketMaster::requestTickets(int seats, int row, int start) {
 
-  cout << "in requestTickets\n";
-
   for (int i = start; i < start + seats; i++) {
     if (!isSeatSold(row, i)) {
       return 1;
     }
   }
-
-    cout << "in requestTickets\n";
-
 return 0;
 }
 
@@ -172,8 +166,6 @@ return 0;
 string TicketMaster::purchaseTickets(int seats, int row, int start, float price) {
   float payment = 0.0;
   char retry = ' ';
-
-  cout << "In purchasetickets\n";
 
   // Validate and accept money input
   while (true) {
@@ -201,29 +193,33 @@ string TicketMaster::purchaseTickets(int seats, int row, int start, float price)
     markSold(row, i);
   }
 
+  string tickets, result;
+  stringstream ss;
+  ss << fixed;
+  ss.precision(2);
+  for (int i = 1; i <= seats; i++) {
+    tickets += "Ticket ";
+    tickets += std::to_string(i);
+    tickets += "\n* * * * * * * * * * * * * * * * * * * * * * *\nRow:   ";
+    tickets += std::to_string(row + 1);
+    tickets += "\tSeat:   ";
+    tickets += std::to_string(start + i);
+    tickets += "\tPrice: $";
+    ss.str("");
+    ss << (price / seats);
+    tickets += ss.str();
+    tickets += "\n* * * * * * * * * * * * * * * * * * * * * * *\n\n";
+  }
+  result += "Here are your tickets:\n\n";
+  result += tickets;
 
-  cout << "In purchasetickets\n";
-
-  // string st;
-  // for (int i = 1; i <= seats; i++) {
-  //   st += "*\t*\t*\t*\t*\n*\tRow: ";
-  //   st += static_cast<string>(row + 1);
-  //   st += "\tSeat: ";
-  //   st += static_cast<string>(start + i);
-  //   st += "\tPrice: $";
-  //   st += static_cast<string>(price);
-  //   st += "*\t*\t*\t*\t\n\n*";
-  // }
-
-  return "Here are your tickets:\n\n";// << st;
+  return result;
 }
 
 
 TicketMaster::~TicketMaster() {
   string tempData = "";
   ofstream SeatsFile;
-
-  cout << "calling deconstructor.\n";
 
   SeatsFile.open("SeatAvailability.dat");
   if (!SeatsFile)
@@ -232,13 +228,22 @@ TicketMaster::~TicketMaster() {
     for (int row = 0; row < Max_Rows; row++) {
       for (int col = 0; col < Max_Cols; col++) {
         SeatsFile << getSeat(row, col);
-        cout << getSeat(row, col);
+        //cout << getSeat(row, col);
       }
       SeatsFile << endl;
-      cout << endl;
+      //cout << endl;
     }
   }
   SeatsFile.close();
+}
+
+void TicketMaster::clearSeats() {
+
+  for (int row = 0; row < Max_Rows; row++) {
+    for (int col = 0; col < Max_Cols; col++) {
+      auditorium[row][col].seatstatus = SeatAvail;
+    }
+  }
 }
 
 #endif

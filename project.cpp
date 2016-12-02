@@ -7,21 +7,20 @@
 using namespace std;
 
 // Prototypes
-void requestSelected(TicketMaster);
-void purchase(TicketMaster, int, int, int);
+void requestSelected(TicketMaster&);
+void purchase(TicketMaster&, int, int, int);
 
 int main() {
 
 	int choice = 0;
 	TicketMaster tm;
-	cout << "in main\n";
 
 	do {
 		while (true) {
 			cout << "Please select an option:\n1: Display Seating Chart\n2: Request Tickets\n3: Print Sales Report\n4: Exit\n   ";
 			cin >> choice;
 
-			if (choice > 0 && choice < 5)
+			if (choice > 0 && choice <= 5)
 				break;
 			else 
 				cout << "Invalid entry. Please try again.\n\n";
@@ -31,20 +30,20 @@ int main() {
 		switch (choice) {
 			case 1: tm.displaySeats();
 							break;
-			case 2: cout << "case 2\n";
-							requestSelected(tm);
+			case 2: requestSelected(tm);
 							break;
 			case 3: tm.salesReport();
 							break;
 			case 4: cout << "Goodbye!\n";
 							break;
+			case 5: tm.clearSeats();
 		}
 	} while (choice != 4);
 
 	return 0;
 }
 
-void requestSelected(TicketMaster tm) {
+void requestSelected(TicketMaster &tm) {
   int reqSeats = 0, reqRow = 0, reqStart = 0, retry = 0;
 
   // Get the Requested number of seats
@@ -98,7 +97,7 @@ void requestSelected(TicketMaster tm) {
   }
 }
 
-void purchase(TicketMaster tm, int seats, int row, int start) {
+void purchase(TicketMaster &tm, int seats, int row, int start) {
 	float price = tm.getSeatPrice(row), total = price * seats;
 	char buy = ' ';
 
