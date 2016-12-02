@@ -14,6 +14,7 @@ int main() {
 
 	int choice = 0;
 	TicketMaster tm;
+	cout << "in main\n";
 
 	do {
 		while (true) {
@@ -30,7 +31,8 @@ int main() {
 		switch (choice) {
 			case 1: tm.displaySeats();
 							break;
-			case 2: requestSelected(tm);
+			case 2: cout << "case 2\n";
+							requestSelected(tm);
 							break;
 			case 3: tm.salesReport();
 							break;
@@ -101,7 +103,7 @@ void purchase(TicketMaster tm, int seats, int row, int start) {
 	char buy = ' ';
 
 	cout << "Congratulations, those seats are available! You have requested " <<
-		seats << " seats. These seats are $" << fixed << setprecision(2)  << price << " each. This brings your total to $"<< total << ". Would you like to purchase these tickets? (Y or N) ";
+		seats << " seats. These seats are $" << fixed << setprecision(2)  << price << " each. This brings your total to $" << total << ". Would you like to purchase these tickets? (Y or N) ";
 		while (true) {
 			cin >> buy;
 			if (buy != 'y' && buy != 'Y' && buy != 'n' && buy != 'N') {
