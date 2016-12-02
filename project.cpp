@@ -103,17 +103,18 @@ void purchase(TicketMaster &tm, int seats, int row, int start) {
 
 	cout << "Congratulations, those seats are available! You have requested " <<
 		seats << " seats. These seats are $" << fixed << setprecision(2)  << price << " each. This brings your total to $" << total << ". Would you like to purchase these tickets? (Y or N) ";
-		while (true) {
-			cin >> buy;
-			if (buy != 'y' && buy != 'Y' && buy != 'n' && buy != 'N') {
-				cout << "Invalid answer, please press Y if you would like to buy these tickets or N if you do not want to buy these tickets.\n";
-			} else if (buy == 'y' || buy == 'Y'){
-				cout << "Great!\n";
-				cout << tm.purchaseTickets(seats, row, start, total);
-				break;
-			} else {
-				cout << "Returning to main menu.\n\n";
-				break;
-			}
+	while (true) {
+		cin >> buy;
+		if (buy != 'y' && buy != 'Y' && buy != 'n' && buy != 'N') {
+			cout << "Invalid answer, please press Y if you would like to buy these tickets or N if you do not want to buy these tickets.\n";
+		} else if (buy == 'y' || buy == 'Y'){
+			cout << "Great!\n";
+			cout << tm.purchaseTickets(seats, row, start, total);
+			break;
+		} else {
+			cout << "Returning to main menu.\n\n";
+			break;
 		}
+	}
+	cout << "Seats sold: " << tm.getSeatsSold() << " Total Money: " << tm.getTotalMoney() << endl;
 }

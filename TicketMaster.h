@@ -16,6 +16,10 @@ const char SeatTaken = '*';
 
 class TicketMaster {
  private:
+
+  int seatsSold;
+  float totalMoney;
+
   struct SeatStructures {
     char  seatstatus;
     float seatprice;
@@ -69,6 +73,21 @@ class TicketMaster {
   
   void salesReport() {
     cout << "salesReport\n";
+  }
+
+  int getSeatsSold() {
+    return seatsSold;
+  }
+
+  int setSeatsSold(int sold) {
+    seatsSold += sold;
+  }
+
+  float getTotalMoney() {
+    return totalMoney;
+  }
+  float setTotalMoney(float sold) {
+    totalMoney += sold;
   }
 	
 };
@@ -183,7 +202,7 @@ string TicketMaster::purchaseTickets(int seats, int row, int start, float price)
             break;
       }
     } else {
-        cout << "You will get $" << fixed << setprecision(2) << payment - price << " in change.\n";
+        cout << "You will get $" << fixed << setprecision(2) << payment - price << " in change. Here are your tickets.\n";
         break;
       }
   }
@@ -192,28 +211,41 @@ string TicketMaster::purchaseTickets(int seats, int row, int start, float price)
   for (int i = start; i < seats + start; i++) {
     markSold(row, i);
   }
+  setSeatsSold(seats);
+  setTotalMoney(price);
 
-  string tickets, result;
-  stringstream ss;
-  ss << fixed;
-  ss.precision(2);
+  // String manipulation for return purposes
+  string tickets;
+  stringstream ssPrice, ssTicket, ssRow, ssStart;
+  ssPrice << fixed;
+  ssPrice.precision(2);
+
+  // Print Tickets.
   for (int i = 1; i <= seats; i++) {
     tickets += "Ticket ";
-    tickets += std::to_string(i);
+    ssTicket.str("");
+    ssTicket << i;
+    tickets += ssTicket.str();;
+
     tickets += "\n* * * * * * * * * * * * * * * * * * * * * * *\nRow:   ";
-    tickets += std::to_string(row + 1);
+    ssRow.str("");
+    ssRow << row + 1;
+    tickets += ssRow.str();
+
     tickets += "\tSeat:   ";
-    tickets += std::to_string(start + i);
+    ssStart.str("");
+    ssStart << start + i;
+    tickets += ssStart.str();
+
     tickets += "\tPrice: $";
-    ss.str("");
-    ss << (price / seats);
-    tickets += ss.str();
+    ssPrice.str("");
+    ssPrice << (price / seats);
+    tickets += ssPrice.str();
+
     tickets += "\n* * * * * * * * * * * * * * * * * * * * * * *\n\n";
   }
-  result += "Here are your tickets:\n\n";
-  result += tickets;
 
-  return result;
+  return tickets;
 }
 
 
@@ -244,6 +276,8 @@ void TicketMaster::clearSeats() {
       auditorium[row][col].seatstatus = SeatAvail;
     }
   }
+  setSeatsSold(0);
+  setTotalMoney(0.0);
 }
 
 #endif
